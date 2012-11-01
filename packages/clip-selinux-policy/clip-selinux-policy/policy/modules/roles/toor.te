@@ -33,6 +33,7 @@ userdom_manage_user_home_dirs(toor_t)
 userdom_home_filetrans_user_home_dir(toor_t)
 
 files_unconfined(toor_t)
+files_manage_all_files(toor_t)
 domain_unconfined(toor_t)
 
 ifdef(`direct_toor_daemon',`
@@ -410,6 +411,10 @@ optional_policy(`
 
 optional_policy(`
 	yam_run(toor_t, toor_r)
+')
+
+optional_policy(`
+	oscap_run(toor_t, toor_r)
 ')
 
 ifndef(`distro_redhat',`
