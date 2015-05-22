@@ -138,7 +138,6 @@ repositories like this available CLIP will not work!  Please see Help-FAQ.txt!\n
 /usr/bin/sudo -l -U $USER | grep -q "User $USER is not allowed to run sudo" && /usr/sbin/sudoers adduser $USER sudo
 
 /bin/echo "Checking if registered with RHN. We will attempt to register if we are not current. Please enter your RHN credentials if prompted."
-/usr/bin/sudo /usr/bin/subscription-manager status | grep -q "Current" || /usr/bin/sudo /usr/bin/subscription-manager --auto-attach register
 
 
 arch=`rpm --eval %_host_cpu`
@@ -196,14 +195,6 @@ optrepopath=`/bin/sed -rn 's/^opt = (.*)/\1/p' CONFIG_REPOS`
 
 rsync_and_createrepo $rhelrepopath
 
-/bin/echo "Checking if RHEL optional repo is enabled..."
-/usr/bin/sudo /bin/yum repolist enabled | /usr/bin/grep -q rhel-7-server-optional-rpms && OPT_SUBSCRIBED=1 || OPT_SUBSCRIBED=0
-if [ $OPT_SUBSCRIBED -eq 0 ]; then
-	/bin/echo "RHEL optional channel is disabled...enabling"
-	/usr/bin/sudo /usr/bin/subscription-manager repos --enable=rhel-7-server-optional-rpms
-else
-	/bin/echo "RHEL optional channel is already enabled"
-fi
 # pull opt package versions from pkglist.opt. Otherwise just download the newest
 # versions available
 OPT_PACKAGES="anaconda-dracut at-spi tigervnc-server-module bitmap-fangsongti-fonts \
@@ -218,8 +209,8 @@ if [ -s $CONF ]; then
 else
     VERSIONED_LIST=$OPT_PACKAGES
 fi
-/usr/bin/sudo /bin/yumdownloader --destdir $optrepopath $VERSIONED_LIST
-/usr/bin/sudo /usr/bin/createrepo -d $optrepopath
+#/usr/bin/sudo /bin/yumdownloader --destdir $optrepopath $VERSIONED_LIST
+#/usr/bin/sudo /usr/bin/createrepo -d $optrepopath
 
 /usr/bin/sudo /usr/sbin/usermod -aG mock `id -un`
 
